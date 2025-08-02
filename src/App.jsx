@@ -1,31 +1,29 @@
 import { useState } from "react";
 import "./App.css";
-import sItems from "./sItems";
 
 export default function App() {
-  const [selectedItem, setSelectedItem] = useState(null);
-  const handleItemClick = (itemClicked) => {
-    setSelectedItem(itemClicked);
+  const [backgroundColor, setBackgroundColor] = useState("white");
+  const handleColorChange = (getColor) => {
+    setBackgroundColor(getColor);
   };
   return (
     <>
-      <h1>Simple item list</h1>
-      <div>
-        {sItems.map((item) => (
-          <li key={item.id} onClick={() => handleItemClick(item)}>
-            {item.name}
-          </li>
-        ))}
-        <div style={{ border: "solid 1px white", marginTop: "50px" }}>
-          {selectedItem && (
-            <>
-              <p>{selectedItem.name}</p>
-              <p>{selectedItem.color}</p>
-              <p>{selectedItem.taste}</p>
-            </>
-          )}
-        </div>
+      <h1>Color Picker</h1>
+      <div
+        style={{
+          width: "200px",
+          height: "200px",
+          border: "solid 1px white",
+          backgroundColor: backgroundColor,
+          color: "black",
+        }}
+      >
+        Current color:{backgroundColor}
       </div>
+      <button onClick={() => handleColorChange("red")}>Red</button>
+      <button onClick={() => handleColorChange("purple")}>Purple</button>
+      <button onClick={() => handleColorChange("white")}>White</button>
+      <button onClick={() => handleColorChange("")}>Reset</button>
     </>
   );
 }
