@@ -1,0 +1,23 @@
+.total-container {
+  display: flex;
+  flex-direction: column;
+  height: 50vh;
+}
+
+.mp-container {
+  width: 500px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.ingredients-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+ul {
+  overflow: scroll;
+  height: 50px;
+  background: transparent;
+}
