@@ -75,3 +75,15 @@ export default function App() {
   );
 }
 */
+{
+  ingredientsList.map((totalList) => (
+    <div className="total-list">
+      <span>Calories: {totalList.calories}g</span>
+      <span>Protein: {totalList.protein} g</span>
+      <span>Carbs: {totalList.carbs} g</span>
+      <span>Fat: {totalList.fat} g</span>
+      <span>Fiber: {totalList.fiber} g</span>
+      <span>Sugar: {totalList.sugar} g</span>
+    </div>
+  ));
+}

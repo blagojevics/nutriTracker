@@ -8,12 +8,15 @@ export default function Leftside() {
   const [totalNutr, setTotalNutr] = useState("");
 
   const handleAddItem = (foodAdd) => {
-    setIngredientsList(foodAdd);
-    console.log(foodAdd);
+    setIngredientsList((prevFoodAdd) => {
+      return [...prevFoodAdd, foodAdd];
+    });
   };
+
   const filteredIngredients = foods.filter((food) =>
     food.name.toLowerCase().includes(searchInput.toLowerCase())
   );
+
   return (
     <>
       <h2>Meal Planner</h2>
@@ -25,7 +28,7 @@ export default function Leftside() {
             type="search"
             placeholder="Add your ingredient"
           />
-          <button onClick={handleAddItem}>Add</button>
+          <button onClick={(foodAdd) => handleAddItem(foodAdd)}>Add</button>
           <br />
           <ul>
             {searchInput === "" ? (
@@ -41,7 +44,9 @@ export default function Leftside() {
             )}
           </ul>
           <span>
-            {ingredientsList.name} - {ingredientsList.unit}
+            {ingredientsList.map((foodList) => (
+              <li key={foodList.id && foodList.name}>{foodList.name}</li>
+            ))}
           </span>
         </div>
         <div className="total-container">
