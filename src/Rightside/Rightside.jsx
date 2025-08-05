@@ -3,32 +3,48 @@ import "./rightside.css";
 import { foods } from "../Test/foods";
 
 export default function Rightside() {
+  const [searchInput, setSearchInput] = useState("");
+
   const [showNutrValue, setShowNutrValue] = useState(() => {
     try {
-      // The saved item here might be a single object, not an array.
-      // So localStorage.getItem("mealIngredient") should perhaps be "selectedNutrient"
-      // to not conflict with Leftside's "mealIngredients" (which is a list).
-      const savedItem = localStorage.getItem("selectedNutrientDetail"); // Use a distinct key
-      if (savedItem === null) {
-        return null; // Initialize with null if nothing saved
+      const savedItem = localStorage.getItem("selectedNutrientDetail");
+      if (
+        savedItem === null ||
+        savedItem === undefined ||
+        savedItem === "null"
+      ) {
+        // <-- More explicit check for null string
+        return null; // Initialize with null if nothing valid saved
       }
-      return JSON.parse(savedItem); // Parse the string back into a JS object
+      const parsedItem = JSON.parse(savedItem);
+      // Double-check: ensure parsed item is actually an object with expected properties
+      if (
+        typeof parsedItem === "object" &&
+        parsedItem !== null &&
+        parsedItem.id &&
+        parsedItem.name
+      ) {
+        return parsedItem;
+      } else {
+        console.warn(
+          "Parsed item from localStorage is not a valid food object, returning null."
+        );
+        return null; // Return null if parsed data is not an object or is malformed
+      }
     } catch (error) {
       console.error("Error parsing data from localStorage:", error);
-      return null; // Return null on parse error
+      return null; // Return null on any parsing error
     }
   });
 
   useEffect(() => {
     try {
-      // Save showNutrValue (the single selected food object) to localStorage
-      // Ensure you're not saving "null" directly, as that might cause issues for JSON.parse on next load.
       if (showNutrValue !== null) {
         localStorage.setItem(
           "selectedNutrientDetail",
           JSON.stringify(showNutrValue)
         );
-        console.log("Selected nutrient saved to localStorage:", showNutrValue);
+        console.log("Saved nutrient to localStorage:", showNutrValue);
       } else {
         localStorage.removeItem("selectedNutrientDetail"); // Remove if selection is cleared
         console.log("Selected nutrient cleared from localStorage.");
@@ -36,27 +52,26 @@ export default function Rightside() {
     } catch (error) {
       console.error("Error saving data to localStorage:", error);
     }
-  }, [showNutrValue]); // Dependency: run this effect whenever showNutrValue changes
+  }, [showNutrValue]);
 
-  const [searchInput, setSearchInput] = useState("");
-
-  // Handler for the clear button
+  // Handler for clearing selected food details
   const handleClearDetails = () => {
-    setShowNutrValue(null); // Set the state back to null to hide the details
-    setSearchInput(""); // Optionally clear the search input too
+    setShowNutrValue(null);
+    setSearchInput("");
   };
 
-  // Handler for search input change (only updates search term)
+  // Handler for search input change
   const handleSearchInputChange = (event) => {
     setSearchInput(event.target.value);
-    // Optionally clear details if user starts typing a new search
-    // If you want details to persist until something new is clicked, remove this line
-    // setShowNutrValue(null);
+    // OPTIONAL: Clear details if user starts typing a new search (uncomment if desired)
+    // if (event.target.value !== "") {
+    //   setShowNutrValue(null);
+    // }
   };
 
-  // Handler for clicking a food item in the search results
+  // Handler for clicking a food item in search results
   const handleFoodDetails = (foodClicked) => {
-    setShowNutrValue(foodClicked); // Set the full food object for display
+    setShowNutrValue(foodClicked);
     // Optional: Clear the search input after selecting an item
     // setSearchInput("");
   };
@@ -70,7 +85,7 @@ export default function Rightside() {
       <div className="container">
         <h2>NutriTracker</h2>
         <input
-          onChange={handleSearchInputChange} // Use the more specific handler name
+          onChange={handleSearchInputChange}
           value={searchInput}
           type="search"
           placeholder="Search..."
@@ -79,7 +94,7 @@ export default function Rightside() {
           {searchInput === "" ? (
             <p>Start typing...</p>
           ) : filteredItems.length === 0 ? (
-            <p>No result found for "{searchInput}"</p> // Fixed typo: "fount" -> "found"
+            <p>No result found for "{searchInput}"</p>
           ) : (
             filteredItems.map((food) => (
               <p onClick={() => handleFoodDetails(food)} key={food.id}>
@@ -89,7 +104,7 @@ export default function Rightside() {
           )}
         </ul>
         <div className="nutrients-container">
-          {showNutrValue ? ( // Conditionally render if showNutrValue is not null
+          {showNutrValue ? ( // This checks if showNutrValue is truthy (an object, not null/0/false/undefined)
             <>
               <h3
                 style={{
@@ -100,7 +115,7 @@ export default function Rightside() {
               >
                 Nutrients for: {showNutrValue.name}{" "}
                 <span
-                  onClick={handleClearDetails} // <-- Call the new handler here
+                  onClick={handleClearDetails}
                   style={{
                     color: "red",
                     marginLeft: "20px",
@@ -111,37 +126,38 @@ export default function Rightside() {
                   X
                 </span>
               </h3>
-              {/* Display nutrients (adjust for nested 'nutrients' object if applicable) */}
               <span>
                 Calories:{" "}
                 {showNutrValue.calories ||
-                  showNutrValue.nutrients.calories ||
+                  showNutrValue.nutrients?.calories ||
                   0}{" "}
                 g
               </span>
               <span>
                 Protein:{" "}
-                {showNutrValue.protein || showNutrValue.nutrients.protein || 0}{" "}
+                {showNutrValue.protein || showNutrValue.nutrients?.protein || 0}{" "}
                 g
               </span>
               <span>
                 Carbs:{" "}
-                {showNutrValue.carbs || showNutrValue.nutrients.carbs || 0} g
+                {showNutrValue.carbs || showNutrValue.nutrients?.carbs || 0} g
               </span>
               <span>
-                Fat: {showNutrValue.fat || showNutrValue.nutrients.fat || 0} g
+                Fat: {showNutrValue.fat || showNutrValue.nutrients?.fat || 0} g
               </span>
               <span>
                 Fiber:{" "}
-                {showNutrValue.fiber || showNutrValue.nutrients.fiber || 0} g
+                {showNutrValue.fiber || showNutrValue.nutrients?.fiber || 0} g
               </span>
               <span>
                 Sugar:{" "}
-                {showNutrValue.sugar || showNutrValue.nutrients.sugar || 0} g
+                {showNutrValue.sugar || showNutrValue.nutrients?.sugar || 0} g
               </span>
             </>
           ) : (
-            <p>Click an ingredient to view its details.</p>
+            <p style={{ textAlign: "center", paddingTop: "50px" }}>
+              Click an ingredient to view its details.
+            </p>
           )}
         </div>
       </div>

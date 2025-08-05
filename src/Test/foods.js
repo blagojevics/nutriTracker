@@ -412,34 +412,3 @@ const categories = [
 ];
 
 export { foods, getFoodsByCategory, categories };
-
-/*
-  const [query, setQuery] = useState("");
-
-  const filteredItems = foods.filter((food) =>
-    food.name.toLowerCase().includes(query.toLowerCase())
-  );
-  return (
-    <div>
-      <h1>food search</h1>
-      <input
-        type="text"
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-      />
-
-      <ul>
-        {filteredItems.map((food) => (
-          <div>
-            {`${food.unit} of ${food.name} contains: Calories - ${food.calories}g, 
-              Protein - ${food.protein}g, 
-              Carbs - ${food.carbs}g, 
-              Fat - ${food.fat}g, 
-              Fiber - ${food.fiber}g, 
-              Sugar - ${food.sugar}g`}
-          </div>
-        ))}
-      </ul>
-    </div>
-  );
-*/
