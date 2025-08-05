@@ -1,24 +1,21 @@
-.total-container {
-  display: flex;
-  flex-direction: column;
-  height: 50vh;
-}
-
 .mp-container {
-  width: 500px;
+  min-width: 600px;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
+  border: 1px solid white;
 }
 
 .ingredients-container {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  margin: 0 10px;
 }
 
-.total-list {
+.total-container {
   display: flex;
   flex-direction: column;
+  justify-content: center;
 }
 
 ul {
