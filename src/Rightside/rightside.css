@@ -7,6 +7,7 @@
   justify-content: center;
   align-items: center;
   gap: 10px;
+  font-size: 26px;
 }
 
 .nutrients-container {
@@ -16,6 +17,7 @@
   align-items: start;
   margin-left: 10px;
   width: 350px;
+  font-size: 20px;
 }
 
 input {
@@ -34,6 +36,7 @@ ul {
   padding: 0;
   margin: 0;
   border-radius: 5px;
+  font-size: 20px;
 
   justify-content: center;
 }

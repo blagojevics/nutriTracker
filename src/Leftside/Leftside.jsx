@@ -26,7 +26,7 @@ export default function Leftside() {
     const jsonString = JSON.stringify(ingredientsList);
     // Save it to localStorage
     localStorage.setItem("mealIngredients", jsonString);
-    console.log("Saved ingredients to localStorage:", ingredientsList); // For debugging
+    console.log("Saved ingredient to localStorage:", ingredientsList); // For debugging
   }, [ingredientsList]); // Dependency array: run this effect whenever ingredientsList changes
 
   const initialIngredientValue = {

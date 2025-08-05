@@ -6,3 +6,8 @@
   gap: 50px;
   margin: 0 auto;
 }
+
+.nutritracker {
+  display: flex;
+  gap: 50px;
+}

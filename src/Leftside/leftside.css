@@ -3,6 +3,8 @@
   display: flex;
   justify-content: space-around;
   border: 1px solid white;
+  border-radius: 10px;
+  font-size: 26px;
 }
 
 .ingredients-container {
@@ -16,10 +18,15 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  font-size: 22px;
 }
 
 ul {
   overflow: scroll;
   height: 50px;
   background: transparent;
+}
+
+h2 {
+  text-align: center;
 }
