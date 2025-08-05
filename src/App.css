@@ -5,6 +5,7 @@
   text-align: center;
   gap: 50px;
   margin: 0 auto;
+  min-height: 500px;
 }
 
 .nutritracker {
