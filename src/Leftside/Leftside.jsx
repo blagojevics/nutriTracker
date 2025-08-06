@@ -82,7 +82,7 @@ export default function Leftside() {
           <br />
           <ul>
             {searchInput === "" ? (
-              <p>Start typing...</p>
+              <p></p>
             ) : filteredIngredients.length === 0 ? (
               <p>No result fount for {searchInput}</p>
             ) : (

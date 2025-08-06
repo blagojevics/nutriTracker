@@ -97,7 +97,11 @@ export default function Rightside() {
             <p>No result found for "{searchInput}"</p>
           ) : (
             filteredItems.map((food) => (
-              <p onClick={() => handleFoodDetails(food)} key={food.id}>
+              <p
+                className="searchBar"
+                onClick={() => handleFoodDetails(food)}
+                key={food.id}
+              >
                 {food.name}
               </p>
             ))
@@ -113,7 +117,8 @@ export default function Rightside() {
                   alignItems: "center",
                 }}
               >
-                Nutrients for: {showNutrValue.name}{" "}
+                Nutrients for: {showNutrValue.name} <br />
+                per 100g
                 <span
                   onClick={handleClearDetails}
                   style={{

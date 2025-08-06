@@ -24,8 +24,9 @@
 
 ul {
   overflow: scroll;
-
-  background: transparent;
+  margin: 0 auto;
+  max-height: 150px;
+  background-color: rgb(56, 56, 56);
 }
 
 h2 {
@@ -46,7 +47,20 @@ h2 {
     max-width: 350px;
   }
 
+  .total-container {
+    font-size: 18px;
+  }
+
   input {
     width: 150px;
+  }
+
+  p {
+    font-size: 18px;
+  }
+
+  ul {
+    overflow: scroll;
+    max-height: 120px;
   }
 }

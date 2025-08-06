@@ -30,7 +30,7 @@ input {
 
 ul {
   width: 250px;
-  background-color: lightgray;
+  background-color: rgb(56, 56, 56);
   color: black;
   display: flex;
   flex-direction: column;
@@ -48,20 +48,32 @@ p {
   align-self: center;
   cursor: pointer;
 }
-p:hover {
-  opacity: 50%;
-}
 
 @media screen and (min-width: 300px) and (max-width: 500px) {
   .container {
     min-width: 300px;
-    max-width: 350px;
+    max-width: 322px;
     margin: 0 auto;
+  }
+
+  .nutrients-container {
+    font-size: 16px;
+    min-width: 300px;
+    max-width: 322px;
   }
 
   input {
     width: 150px;
     margin: 0 auto;
     padding: 0;
+  }
+
+  h3 {
+    font-size: 16px;
+    margin: 0 auto;
+  }
+
+  span {
+    margin: 0 auto;
   }
 }
