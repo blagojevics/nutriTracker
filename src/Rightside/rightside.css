@@ -1,3 +1,23 @@
+.nutrient-details-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Two columns for nutrient facts */
+  gap: 10px 20px; /* Row and column gap */
+  font-size: 0.95em;
+  color: #d0d0d0;
+}
+.nutrient-details-grid p {
+  margin: 0; /* Remove default paragraph margins */
+  display: flex; /* Make it a flex container to align label and value */
+  justify-content: space-between; /* Push label to left, value to right */
+  align-items: center;
+}
+.nutrient-details-grid p span {
+  font-weight: normal; /* Make the label normal, value bold */
+  color: #a0a0a0; /* Muted color for label */
+}
+.nutrient-details-grid p strong {
+  color: #e0e0e0; /* Prominent color for value */
+}
 .container {
   border: solid 1px white;
   border-radius: 10px;
