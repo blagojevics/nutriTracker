@@ -1,71 +1,159 @@
 import { useState, useEffect } from "react";
-import { foods } from "../Test/foods";
 import "./leftside.css";
 
 export default function Leftside() {
   const [searchInput, setSearchInput] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+
   const [ingredientsList, setIngredientsList] = useState(() => {
     try {
       const savedList = localStorage.getItem("mealIngredients");
-      if (savedList === null) {
-        // More explicit check for null if no item exists
-        return []; // No saved data found, so initialize with an empty array
-      }
-      // If data is found, parse it
-      return JSON.parse(savedList);
+      return savedList === null ? [] : JSON.parse(savedList);
     } catch (error) {
       console.error("Error parsing data from localStorage:", error);
-      // If there's an error parsing (e.g., corrupted data), initialize with an empty array
       return [];
     }
   });
 
   useEffect(() => {
-    // This code runs whenever 'ingredientsList' changes
-    // Convert the JS array/object to a JSON string
-    const jsonString = JSON.stringify(ingredientsList);
-    // Save it to localStorage
-    localStorage.setItem("mealIngredients", jsonString);
-    console.log("Saved ingredient to localStorage:", ingredientsList); // For debugging
-  }, [ingredientsList]); // Dependency array: run this effect whenever ingredientsList changes
+    try {
+      const jsonString = JSON.stringify(ingredientsList);
+      localStorage.setItem("mealIngredients", jsonString);
+    } catch (error) {
+      console.error("Error saving data to localStorage:", error);
+    }
+  }, [ingredientsList]);
+
+  const CALORIENINJAS_API_KEY = import.meta.env.VITE_APP_KEY;
+
+  console.log("Leftside Component Rendered!");
+  console.log("Leftside API Key Value:", CALORIENINJAS_API_KEY);
+  console.log("Leftside Search Input Value:", searchInput);
+
+  useEffect(() => {
+    console.log("Leftside useEffect triggered. searchInput:", searchInput);
+    console.log(
+      "Leftside useEffect - API Key at trigger:",
+      CALORIENINJAS_API_KEY
+    );
+
+    const fetchNutritionData = async () => {
+      console.log("Leftside fetchNutritionData started.");
+      console.log(
+        "Leftside fetchNutritionData - searchInput for fetch:",
+        searchInput
+      );
+      console.log(
+        "Leftside fetchNutritionData - API Key for fetch:",
+        CALORIENINJAS_API_KEY
+      );
+
+      if (!searchInput || !CALORIENINJAS_API_KEY) {
+        console.log(
+          "Leftside Fetch skipped: searchInput or API Key missing for fetch."
+        );
+        setSearchResults([]);
+        setIsLoading(false);
+        setError(null);
+        return;
+      }
+
+      setIsLoading(true);
+      setError(null);
+
+      try {
+        const response = await fetch(
+          `https://api.calorieninjas.com/v1/nutrition?query=${encodeURIComponent(
+            searchInput
+          )}`,
+          {
+            method: "GET",
+            headers: {
+              "X-Api-Key": CALORIENINJAS_API_KEY,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error("Leftside API Error Response Text:", errorText);
+          throw new Error(
+            `HTTP error! Status: ${response.status} - ${
+              response.statusText || "Unknown error"
+            }`
+          );
+        }
+
+        const data = await response.json();
+        console.log("Leftside API Response Data:", data);
+        setSearchResults(data.items || []);
+      } catch (err) {
+        console.error("Leftside Fetching Error:", err);
+        setError(err.message || "Failed to fetch nutrition data.");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    const debounceTimeout = setTimeout(() => {
+      fetchNutritionData();
+    }, 500);
+
+    return () => clearTimeout(debounceTimeout);
+  }, [searchInput, CALORIENINJAS_API_KEY]);
 
   const initialIngredientValue = {
     calories: 0,
-    protein: 0,
-    carbs: 0,
-    fat: 0,
-    fiber: 0,
-    sugar: 0,
+    protein_g: 0,
+    carbohydrates_total_g: 0,
+    fat_total_g: 0,
+    fiber_g: 0,
+    sugar_g: 0,
   };
+
   const ingredientSum = ingredientsList.reduce(
     (accumulator, currentFoodItem) => {
       accumulator.calories += currentFoodItem.calories || 0;
-      accumulator.protein += currentFoodItem.protein || 0;
-      accumulator.carbs += currentFoodItem.carbs || 0;
-      accumulator.fat += currentFoodItem.fat || 0;
-      accumulator.sugar += currentFoodItem.sugar || 0;
-      accumulator.fiber += currentFoodItem.fiber || 0;
-
+      accumulator.protein_g += currentFoodItem.protein_g || 0;
+      accumulator.carbohydrates_total_g +=
+        currentFoodItem.carbohydrates_total_g || 0;
+      accumulator.fat_total_g += currentFoodItem.fat_total_g || 0;
+      accumulator.sugar_g += currentFoodItem.sugar_g || 0;
+      accumulator.fiber_g += currentFoodItem.fiber_g || 0;
       return accumulator;
     },
     initialIngredientValue
   );
 
-  const handleDelBtn = (idToDelete) => {
+  const handleDelBtn = (nameToDelete, servingSizeToDelete) => {
     setIngredientsList((prevList) => {
-      return prevList.filter((ingredient) => ingredient.id !== idToDelete);
+      return prevList.filter(
+        (ingredient) =>
+          !(
+            ingredient.name === nameToDelete &&
+            ingredient.serving_size_g === servingSizeToDelete
+          )
+      );
     });
   };
 
   const handleAddItem = (foodAdd) => {
-    setIngredientsList((prevFoodAdd) => {
-      return [...prevFoodAdd, foodAdd];
-    });
+    const itemToAdd = {
+      ...foodAdd,
+      id:
+        foodAdd.id || `${foodAdd.name}-${foodAdd.serving_size_g}-${Date.now()}`,
+      calories: foodAdd.calories || 0,
+      protein_g: foodAdd.protein_g || 0,
+      carbohydrates_total_g: foodAdd.carbohydrates_total_g || 0,
+      fat_total_g: foodAdd.fat_total_g || 0,
+      fiber_g: foodAdd.fiber_g || 0,
+      sugar_g: foodAdd.sugar_g || 0,
+    };
+    setIngredientsList((prevList) => [...prevList, itemToAdd]);
   };
-
-  const filteredIngredients = foods.filter((food) =>
-    food.name.toLowerCase().includes(searchInput.toLowerCase())
-  );
 
   return (
     <>
@@ -76,29 +164,44 @@ export default function Leftside() {
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
             type="search"
-            placeholder="Add your ingredient"
+            placeholder="Search for food to add..."
           />
-          {/* <button onClick={(foodAdd) => handleAddItem(foodAdd)}>Add</button>*/}
-          <br />
           <ul>
-            {searchInput === "" ? (
-              <p></p>
-            ) : filteredIngredients.length === 0 ? (
-              <p>No result fount for {searchInput}</p>
-            ) : (
-              filteredIngredients.map((food) => (
-                <p onClick={() => handleAddItem(food)} key={food.id}>
-                  {food.name}
+            {isLoading && searchInput && <p>Searching...</p>}
+            {error && <p style={{ color: "red" }}>Error: {error}</p>}
+            {!isLoading &&
+              !error &&
+              searchInput &&
+              searchResults.length === 0 && (
+                <p>No results found for "{searchInput}"</p>
+              )}
+            {!isLoading &&
+              !error &&
+              searchInput &&
+              searchResults.length > 0 &&
+              searchResults.map((food, index) => (
+                <p
+                  className="searchBar"
+                  onClick={() => handleAddItem(food)}
+                  key={food.name + food.serving_size_g + index}
+                >
+                  {food.name} ({food.calories || 0} kcal)
                 </p>
-              ))
-            )}
+              ))}
+            {!searchInput && <p>Start typing to search for food items.</p>}
           </ul>
           <span>
-            {ingredientsList.map((foodList) => (
-              <p key={Math.random() * 200}>
-                {foodList.name}{" "}
+            {ingredientsList.map((foodItem, index) => (
+              <p
+                key={
+                  foodItem.id || foodItem.name + foodItem.serving_size_g + index
+                }
+              >
+                {foodItem.name} ({foodItem.serving_size_g || 0}g){" "}
                 <span
-                  onClick={() => handleDelBtn(foodList.id)}
+                  onClick={() =>
+                    handleDelBtn(foodItem.name, foodItem.serving_size_g)
+                  }
                   style={{ color: "red", marginLeft: "20px" }}
                 >
                   X
@@ -109,13 +212,12 @@ export default function Leftside() {
         </div>
         <div className="total-container">
           <h3>Total:</h3>
-
-          <span>Calories: {ingredientSum.calories.toFixed(1)}g</span>
-          <span>Protein: {ingredientSum.protein.toFixed(1)} g</span>
-          <span>Carbs: {ingredientSum.carbs.toFixed(1)} g</span>
-          <span>Fat: {ingredientSum.fat.toFixed(1)} g</span>
-          <span>Fiber: {ingredientSum.fiber.toFixed(1)} g</span>
-          <span>Sugar: {ingredientSum.sugar.toFixed(1)} g</span>
+          <span>Calories: {ingredientSum.calories.toFixed(1)} kcal</span>
+          <span>Protein: {ingredientSum.protein_g.toFixed(1)} g</span>
+          <span>Carbs: {ingredientSum.carbohydrates_total_g.toFixed(1)} g</span>
+          <span>Fat: {ingredientSum.fat_total_g.toFixed(1)} g</span>
+          <span>Fiber: {ingredientSum.fiber_g.toFixed(1)} g</span>
+          <span>Sugar: {ingredientSum.sugar_g.toFixed(1)} g</span>
         </div>
       </div>
     </>
