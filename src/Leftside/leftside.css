@@ -1,66 +1,18 @@
 .mp-container {
-  min-width: 600px;
-  display: flex;
-  justify-content: space-around;
-  border: 1px solid white;
-  border-radius: 10px;
-  font-size: 26px;
-}
-
-.ingredients-container {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin: 0 10px;
-}
-
-.total-container {
+  background-color: #282727;
+  color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  padding: 30px;
+  width: 100%;
+  max-width: 450px;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  font-size: 22px;
-  padding-bottom: 20px;
-}
-
-ul {
-  overflow: scroll;
-  margin: 0 auto;
-  max-height: 150px;
-  background-color: rgb(56, 56, 56);
-}
-
-h2 {
-  text-align: center;
-}
-
-@media screen and (min-width: 300px) and (max-width: 500px) {
-  .mp-container {
-    display: flex;
-    flex-direction: column;
-    min-width: 300px;
-    max-width: 350px;
-    margin: 0 auto;
-  }
-
-  .ingredients-container {
-    min-width: 300px;
-    max-width: 350px;
-  }
-
-  .total-container {
-    font-size: 18px;
-  }
-
-  input {
-    width: 150px;
-  }
-
-  p {
-    font-size: 18px;
-  }
-
-  ul {
-    overflow: scroll;
-    max-height: 120px;
-  }
+  justify-content: start;
+  align-items: center;
+  gap: 15px;
+  font-size: 20px;
+  position: relative;
+  overflow: hidden;
 }

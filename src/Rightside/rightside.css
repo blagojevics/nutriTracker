@@ -1,99 +1,118 @@
-.nutrient-details-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr; /* Two columns for nutrient facts */
-  gap: 10px 20px; /* Row and column gap */
-  font-size: 0.95em;
-  color: #d0d0d0;
-}
-.nutrient-details-grid p {
-  margin: 0; /* Remove default paragraph margins */
-  display: flex; /* Make it a flex container to align label and value */
-  justify-content: space-between; /* Push label to left, value to right */
-  align-items: center;
-}
-.nutrient-details-grid p span {
-  font-weight: normal; /* Make the label normal, value bold */
-  color: #a0a0a0; /* Muted color for label */
-}
-.nutrient-details-grid p strong {
-  color: #e0e0e0; /* Prominent color for value */
-}
 .container {
-  border: solid 1px white;
-  border-radius: 10px;
+  background-color: #282727;
+  color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  padding: 30px;
+  width: 100%;
+  max-width: 450px;
+  box-sizing: border-box;
   display: flex;
-  flex: 1;
   flex-direction: column;
   justify-content: start;
   align-items: center;
-  gap: 10px;
-  font-size: 26px;
+  gap: 15px;
+  font-size: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.clear-details-button {
+  color: red;
+  margin-left: 20px;
+}
+
+.input-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #444;
+  border-radius: 8px;
+  background-color: #3a3a3a;
+  color: #e0e0e0;
+  font-size: 1em;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.nutrient-details-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  font-size: 16px;
+  gap: 15px;
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #444;
+  border-radius: 8px;
+  background-color: #3a3a3a;
+  color: #e0e0e0;
+  font-size: 1em;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 
 .nutrients-container {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  align-items: start;
-  margin-left: 10px;
-  width: 350px;
-  font-size: 20px;
-  padding-bottom: 20px;
+  font-size: 18px;
 }
 
 input {
+  font-size: 15px;
+  background-color: transparent;
+  color: #ffffff;
   border: none;
-  background: transparent;
-  border-bottom: 1px solid white;
-  padding: 3px;
+  border-bottom: 0.5px solid rgb(255, 252, 252);
+  margin-bottom: 5px;
+}
+h2 {
+  font-size: 2em;
 }
 
-ul {
-  width: 250px;
-  background-color: rgb(56, 56, 56);
-  color: black;
-  display: flex;
-  flex-direction: column;
-  padding: 0;
-  margin: 0;
-  border-radius: 5px;
-  font-size: 20px;
-
-  justify-content: center;
+.message-text {
+  font-size: 16px;
+  color: #c5c5c5;
 }
-p {
-  transition: 0.3s;
-  padding: 0px;
-  margin: 0px;
-  align-self: center;
-  cursor: pointer;
-}
-
-@media screen and (min-width: 300px) and (max-width: 500px) {
+/* --- Mobile Responsiveness --- */
+@media (max-width: 768px) {
   .container {
-    min-width: 300px;
-    max-width: 322px;
+    min-width: unset; /* Remove explicit min-width */
+    max-width: 90%; /* Adjust width for smaller screens */
     margin: 0 auto;
+    padding: 20px;
+    font-size: 22px; /* Base font adjustment for mobile */
   }
 
   .nutrients-container {
-    font-size: 16px;
-    min-width: 300px;
-    max-width: 322px;
+    min-width: unset;
+    max-width: 100%; /* Take full width of parent */
+    font-size: 18px; /* Font adjustment */
+    align-items: center; /* Center the nutrients container */
+  }
+  .nutrients-container p {
+    /* For individual nutrient lines */
+    text-align: left; /* Adjust text alignment */
+    width: 100%; /* Take full width */
   }
 
   input {
-    width: 150px;
-    margin: 0 auto;
-    padding: 0;
+    width: 100%; /* Ensure input is full width */
+    margin: 0;
   }
 
   h3 {
-    font-size: 16px;
-    margin: 0 auto;
+    font-size: 1.2em; /* Relative to container font size */
+    margin: 0;
+  }
+  span {
+    /* For nutrient labels, let flexbox handle alignment within .nutrient-details-grid */
+    margin: 0; /* Remove auto margins to avoid conflicts */
   }
 
-  span {
-    margin: 0 auto;
+  ul {
+    width: 100%; /* Ensure ul takes full width */
+  }
+  ul p {
+    font-size: 0.9em;
   }
 }

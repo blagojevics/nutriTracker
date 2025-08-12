@@ -28,17 +28,7 @@ export default function Leftside() {
 
   const CALORIENINJAS_API_KEY = import.meta.env.VITE_APP_KEY;
 
-  console.log("Leftside Component Rendered!");
-  console.log("Leftside API Key Value:", CALORIENINJAS_API_KEY);
-  console.log("Leftside Search Input Value:", searchInput);
-
   useEffect(() => {
-    console.log("Leftside useEffect triggered. searchInput:", searchInput);
-    console.log(
-      "Leftside useEffect - API Key at trigger:",
-      CALORIENINJAS_API_KEY
-    );
-
     const fetchNutritionData = async () => {
       console.log("Leftside fetchNutritionData started.");
       console.log(
@@ -112,6 +102,8 @@ export default function Leftside() {
     fat_total_g: 0,
     fiber_g: 0,
     sugar_g: 0,
+    sodium_mg: 0,
+    cholesterol_mg: 0,
   };
 
   const ingredientSum = ingredientsList.reduce(
@@ -123,6 +115,8 @@ export default function Leftside() {
       accumulator.fat_total_g += currentFoodItem.fat_total_g || 0;
       accumulator.sugar_g += currentFoodItem.sugar_g || 0;
       accumulator.fiber_g += currentFoodItem.fiber_g || 0;
+      accumulator.sodium_mg += currentFoodItem.sodium_mg || 0;
+      accumulator.cholesterol_mg += currentFoodItem.cholesterol_mg || 0;
       return accumulator;
     },
     initialIngredientValue
@@ -197,7 +191,7 @@ export default function Leftside() {
                   foodItem.id || foodItem.name + foodItem.serving_size_g + index
                 }
               >
-                {foodItem.name} ({foodItem.serving_size_g || 0}g){" "}
+                {foodItem.name}{" "}
                 <span
                   onClick={() =>
                     handleDelBtn(foodItem.name, foodItem.serving_size_g)
@@ -212,12 +206,43 @@ export default function Leftside() {
         </div>
         <div className="total-container">
           <h3>Total:</h3>
-          <span>Calories: {ingredientSum.calories.toFixed(1)} kcal</span>
-          <span>Protein: {ingredientSum.protein_g.toFixed(1)} g</span>
-          <span>Carbs: {ingredientSum.carbohydrates_total_g.toFixed(1)} g</span>
-          <span>Fat: {ingredientSum.fat_total_g.toFixed(1)} g</span>
-          <span>Fiber: {ingredientSum.fiber_g.toFixed(1)} g</span>
-          <span>Sugar: {ingredientSum.sugar_g.toFixed(1)} g</span>
+          <div className="nutrient-details-grid">
+            <p>
+              <span>Calories:</span>{" "}
+              <strong>{ingredientSum.calories.toFixed(1) || 0}</strong> kcal
+            </p>
+            <p>
+              <span>Protein:</span>{" "}
+              <strong>{ingredientSum.protein_g.toFixed(1) || 0}</strong> g
+            </p>
+            <p>
+              <span>Carbs:</span>{" "}
+              <strong>
+                {ingredientSum.carbohydrates_total_g.toFixed(1) || 0}
+              </strong>{" "}
+              g
+            </p>
+            <p>
+              <span>Fat:</span>{" "}
+              <strong>{ingredientSum.fat_total_g.toFixed(1) || 0}</strong> g
+            </p>
+            <p>
+              <span>Fiber:</span>{" "}
+              <strong>{ingredientSum.fiber_g.toFixed(1) || 0}</strong> g
+            </p>
+            <p>
+              <span>Sugar:</span>{" "}
+              <strong>{ingredientSum.sugar_g.toFixed(1) || 0}</strong> g
+            </p>
+            <p>
+              <span>Sodium:</span>{" "}
+              <strong>{ingredientSum.sodium_mg.toFixed(1) || 0}</strong> mg
+            </p>
+            <p>
+              <span>Cholesterol:</span>{" "}
+              <strong>{ingredientSum.cholesterol_mg.toFixed(1) || 0}</strong> mg
+            </p>
+          </div>
         </div>
       </div>
     </>
