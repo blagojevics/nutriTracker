@@ -175,6 +175,7 @@ export default function Leftside() {
               searchResults.length > 0 &&
               searchResults.map((food, index) => (
                 <p
+                  style={{ cursor: "pointer" }}
                   className="searchBar"
                   onClick={() => handleAddItem(food)}
                   key={food.name + food.serving_size_g + index}

@@ -120,7 +120,7 @@ export default function Rightside() {
             onChange={handleSearchInputChange}
             value={searchInput}
             type="search"
-            placeholder="Search for food (e.g., '1 apple', '100g chicken')"
+            placeholder="(e.g., '1 apple', '200g chicken')"
           />
           <ul className="search-results-list">
             {isLoading && searchInput && (
@@ -141,6 +141,7 @@ export default function Rightside() {
               searchResults.length > 0 &&
               searchResults.map((food, index) => (
                 <p
+                  style={{ cursor: "pointer" }}
                   className="searchBar"
                   onClick={() => handleFoodDetails(food)}
                   key={food.name + food.serving_size_g + index}
